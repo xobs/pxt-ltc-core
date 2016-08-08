@@ -62,7 +62,7 @@ MicroBit::MicroBit() :
     serial(USBTX, USBRX),
 	resetButton(MICROBIT_PIN_BUTTON_RESET),
     storage(),
-    i2c(I2C_SDA0, I2C_SCL0),
+    i2c(p20, p19),
     messageBus(),
     display(),
     buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
@@ -79,8 +79,8 @@ MicroBit::MicroBit() :
        MICROBIT_ID_IO_P12,MICROBIT_ID_IO_P13,MICROBIT_ID_IO_P14,
        MICROBIT_ID_IO_P15,MICROBIT_ID_IO_P16,MICROBIT_ID_IO_P19,
        MICROBIT_ID_IO_P20),
-    bleManager(storage),
-    radio(),
+   bleManager(storage),
+  radio(),
     ble(NULL)
 {
     // Clear our status

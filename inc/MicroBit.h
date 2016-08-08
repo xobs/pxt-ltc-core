@@ -49,7 +49,7 @@ DEALINGS IN THE SOFTWARE.
 #include "MicroBitPin.h"
 #include "MicroBitCompass.h"
 #include "MicroBitCompassCalibrator.h"
-#include "MicroBitAccelerometer.h"
+#include "MicroBitAccelerometer-bmx.h"
 #include "MicroBitThermometer.h"
 #include "MicroBitLightSensor.h"
 #include "MicroBitMultiButton.h"

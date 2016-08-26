@@ -4,6 +4,10 @@ The MIT License (MIT)
 Copyright (c) 2016 British Broadcasting Corporation.
 This software is provided by Lancaster University by arrangement with the BBC.
 
+Modifications Copyright (c) 2016 Calliope GbR
+Modifications are provided by DELTA Systems (Georg Sommer) - Thomas Kern
+und Björn Eberhardt GbR by arrangement with Calliope GbR. 
+
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
 to deal in the Software without restriction, including without limitation
@@ -59,29 +63,32 @@ RawSerial* SERIAL_DEBUG = NULL;
   * that represent various device drivers used to control aspects of the micro:bit.
   */
 MicroBit::MicroBit() :
+    
     serial(USBTX, USBRX),
 	resetButton(MICROBIT_PIN_BUTTON_RESET),
     storage(),
-    i2c(p20, p19),
+    //i2c(I2C_SDA0, I2C_SCL0),
     messageBus(),
     display(),
     buttonA(MICROBIT_PIN_BUTTON_A, MICROBIT_ID_BUTTON_A),
     buttonB(MICROBIT_PIN_BUTTON_B, MICROBIT_ID_BUTTON_B),
     buttonAB(MICROBIT_ID_BUTTON_A,MICROBIT_ID_BUTTON_B, MICROBIT_ID_BUTTON_AB),
-    accelerometer(i2c),
-    compass(i2c, accelerometer, storage),
-    compassCalibrator(compass, accelerometer, display),
+    //accelerometer(i2c),
+    //compass(i2c, accelerometer, storage),
+    //compassCalibrator(compass, accelerometer, display),
     thermometer(storage),
     io(MICROBIT_ID_IO_P0,MICROBIT_ID_IO_P1,MICROBIT_ID_IO_P2,
        MICROBIT_ID_IO_P3,MICROBIT_ID_IO_P4,MICROBIT_ID_IO_P5,
-       MICROBIT_ID_IO_P6,MICROBIT_ID_IO_P7,MICROBIT_ID_IO_P8,
-       MICROBIT_ID_IO_P9,MICROBIT_ID_IO_P10,MICROBIT_ID_IO_P11,
-       MICROBIT_ID_IO_P12,MICROBIT_ID_IO_P13,MICROBIT_ID_IO_P14,
-       MICROBIT_ID_IO_P15,MICROBIT_ID_IO_P16,MICROBIT_ID_IO_P19,
-       MICROBIT_ID_IO_P20),
-   bleManager(storage),
-  radio(),
-    ble(NULL)
+       MICROBIT_ID_IO_P6,MICROBIT_ID_IO_P7,MICROBIT_ID_IO_P9,
+       MICROBIT_ID_IO_P10,MICROBIT_ID_IO_P11,MICROBIT_ID_IO_P19,
+       MICROBIT_ID_IO_P20,CALLIOPE_ID_IO_P0,CALLIOPE_ID_IO_P7,
+       CALLIOPE_ID_IO_P8,CALLIOPE_ID_IO_P9,CALLIOPE_ID_IO_P13,
+       CALLIOPE_ID_IO_P14,CALLIOPE_ID_IO_P15),
+    bleManager(storage),
+    radio(),
+    ble(NULL),
+    rgb(),
+    soundmotor()
 {
     // Clear our status
     status = 0;
@@ -203,21 +210,20 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             // A listener has been registered for the compass.
             // The compass uses lazy instantiation, we just need to read the data once to start it running.
             // Touch the compass through the heading() function to ensure it is calibrated. if it isn't this will launch any associated calibration algorithms.
-            compass.heading();
-
+            //compass.heading();
             break;
 
         case MICROBIT_ID_ACCELEROMETER:
         case MICROBIT_ID_GESTURE:
             // A listener has been registered for the accelerometer.
             // The accelerometer uses lazy instantiation, we just need to read the data once to start it running.
-            accelerometer.updateSample();
+            //accelerometer.updateSample();
             break;
 
         case MICROBIT_ID_THERMOMETER:
             // A listener has been registered for the thermometer.
             // The thermometer uses lazy instantiation, we just need to read the data once to start it running.
-            thermometer.updateSample();
+            //thermometer.updateSample();
             break;
     }
 }

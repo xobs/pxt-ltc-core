@@ -109,7 +109,7 @@ class MicroBit
     MicroBitStorage             storage;
 	
     // I2C Interface
-    //MicroBitI2C                 i2c;
+    MicroBitI2C                 i2c;
 	
     // Device level Message Bus abstraction
     MicroBitMessageBus          messageBus;
@@ -119,9 +119,9 @@ class MicroBit
     MicroBitButton              buttonA;
     MicroBitButton              buttonB;
     MicroBitMultiButton         buttonAB;
-    //MicroBitAccelerometer       accelerometer;
-    //MicroBitCompass             compass;
-    //MicroBitCompassCalibrator   compassCalibrator;
+    MicroBitAccelerometer       accelerometer;
+    MicroBitCompass             compass;
+    MicroBitCompassCalibrator   compassCalibrator;
     MicroBitThermometer         thermometer;
     
     //An object of available IO pins on the device

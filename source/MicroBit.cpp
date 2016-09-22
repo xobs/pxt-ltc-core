@@ -211,20 +211,21 @@ void MicroBit::onListenerRegisteredEvent(MicroBitEvent evt)
             // A listener has been registered for the compass.
             // The compass uses lazy instantiation, we just need to read the data once to start it running.
             // Touch the compass through the heading() function to ensure it is calibrated. if it isn't this will launch any associated calibration algorithms.
-            //compass.heading();
+            compass.heading();
+
             break;
 
         case MICROBIT_ID_ACCELEROMETER:
         case MICROBIT_ID_GESTURE:
             // A listener has been registered for the accelerometer.
             // The accelerometer uses lazy instantiation, we just need to read the data once to start it running.
-            //accelerometer.updateSample();
+            accelerometer.updateSample();
             break;
 
         case MICROBIT_ID_THERMOMETER:
             // A listener has been registered for the thermometer.
             // The thermometer uses lazy instantiation, we just need to read the data once to start it running.
-            //thermometer.updateSample();
+            thermometer.updateSample();
             break;
     }
 }

@@ -119,6 +119,9 @@ void MicroBit::init()
     if (status & MICROBIT_INITIALIZED)
         return;
 
+    // configure the accelerometer
+    accelerometer.configure();
+
 #if CONFIG_ENABLED(MICROBIT_HEAP_ALLOCATOR)
     // Bring up a nested heap allocator.
     microbit_create_nested_heap(MICROBIT_NESTED_HEAP_SIZE);

@@ -1,6 +1,6 @@
 {
   "build": {
-    "target": "bbc-microbit-classic-gcc,*",
+    "target": "chibitronics-ltc-gcc,*",
     "targetSetExplicitly": true
   }
 }

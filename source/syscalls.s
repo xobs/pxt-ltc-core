@@ -1,3 +1,5 @@
+.cpu    cortex-m0plus
+.fpu    softvfp
 .text
 
 .global memset

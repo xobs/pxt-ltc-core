@@ -274,7 +274,7 @@ const int vtableShift = 2;
   const uint32_t functionsAndBytecode[] __attribute__((aligned(0x20))) = { \
     0x08010801, 0x42424242, 0x08010801, 0x8de9d83e,
 
-#define PXT_SHIMS_END }; }
+#define PXT_SHIMS_END };
 
 #pragma GCC diagnostic ignored "-Wpmf-conversions"
 

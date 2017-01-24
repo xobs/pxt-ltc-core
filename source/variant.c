@@ -48,19 +48,8 @@ const char *panic_msg = "";
 int error_code = 0;
 int error_subcode = 0;
 
-__attribute__((naked))
-void *malloc(size_t size) {
-  (void)size;
-  asm("svc #85");
-}
-
-__attribute__((naked))
-void *memset(void *s, int c, size_t n) {
-  (void)s;
-  (void)c;
-  (void)n;
-  asm("svc #5");
-}
+void *malloc(size_t size);
+void *memset(void *s, int c, size_t n);
 
 static uint32_t *allocate(uint16_t sz) {
   uint32_t *arr;

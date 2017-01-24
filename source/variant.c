@@ -29,6 +29,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <stdint.h>
 #include "app.h"
+#include "pxt.h"
 
 /* Variables provided by the linker */
 extern uint32_t _textdata;
@@ -46,13 +47,13 @@ static uint32_t *globals;
 static const char *panic_msg = "";
 
 __attribute__((naked))
-static void *malloc(size_t size) {
+void *malloc(size_t size) {
   (void)size;
   asm("svc #85");
 }
 
 __attribute__((naked))
-static void *memset(void *s, int c, size_t n) {
+void *memset(void *s, int c, size_t n) {
   (void)s;
   (void)c;
   (void)n;
@@ -124,11 +125,6 @@ static void exec_binary(int32_t *pc) {
   return;
 }
 
-__attribute__((section(".bytecode_start")))
-const uint32_t functionsAndBytecode[] __attribute__((aligned(0x20))) = {
-      0x08010801, 0x42424242, 0x08010801, 0x8de9d83e,
-};
-
 __attribute__((naked, noreturn))
 void Esplanade_Main(void) {
 
@@ -137,7 +133,7 @@ void Esplanade_Main(void) {
   panic("Exited");
 }
 
-__attribute__ ((used, section(".dataend")))
+__attribute__ ((used, section(".progheader")))
 struct app_header app_header = {
   .data_load_start  = &_textdata,
   .data_start       = &_data,

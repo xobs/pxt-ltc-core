@@ -1,6 +1,8 @@
 .cpu    cortex-m0plus
 .fpu    softvfp
 .text
+.thumb
+.align  2
 
 .global memset
 memset:

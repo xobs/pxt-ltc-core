@@ -44,7 +44,9 @@ extern uint32_t __heap_end__;
 
 static uint16_t *bytecode;
 static uint32_t *globals;
-static const char *panic_msg = "";
+const char *panic_msg = "";
+int error_code = 0;
+int error_subcode = 0;
 
 __attribute__((naked))
 void *malloc(size_t size) {
@@ -82,10 +84,17 @@ static int getNumGlobals(void) {
   return bytecode[16];
 }
 
+__attribute__((noreturn))
 static void panic(const char *str) {
   panic_msg = str;
   while (1)
     ;
+}
+
+void error(ERROR code, int subcode) {
+  error_code = (int)code;
+  error_subcode = subcode;
+  panic("Errored");
 }
 
 static void assert(int cond, const char *msg) {

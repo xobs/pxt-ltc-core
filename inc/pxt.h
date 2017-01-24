@@ -34,9 +34,17 @@ uint32_t runAction2(Action a, int arg0, int arg1);
 uint32_t runAction1(Action a, int arg0);
 uint32_t runAction0(Action a);
 
+void error(ERROR code, int subcode
+#ifdef __cplusplus
+    = 0
+#endif
+);
+
 #ifdef __cplusplus
 };
 
+
+#if 0
 class RefRecord;
 RefRecord* mkClassInstance(int vtableOffset);
 
@@ -249,6 +257,7 @@ const int vtableShift = 2;
     void print();
     RefRefLocal();
   };
+#endif
 
 #endif /* __cplusplus */
 

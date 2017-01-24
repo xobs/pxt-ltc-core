@@ -1,3 +1,5 @@
+.text
+
 .global memset
 memset:
     svc #5

@@ -82,7 +82,8 @@ SECTIONS
     *(.data .data.* .gnu.linkonce.d.*)
     . = ALIGN(4);
     *(.ramtext)
-    . = ALIGN(4);
+
+    . = ALIGN(16);
     *(.dataend .dataend.*)
     PROVIDE(_edata = .);
   } > ram AT > flash

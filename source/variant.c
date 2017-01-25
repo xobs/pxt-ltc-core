@@ -42,8 +42,8 @@ extern uint32_t __init_array_end;
 extern uint32_t __heap_base__;
 extern uint32_t __heap_end__;
 
-static uint16_t *bytecode;
-static uint32_t *globals;
+uint16_t *bytecode;
+uint32_t *globals;
 const char *panic_msg = "";
 int error_code = 0;
 int error_subcode = 0;

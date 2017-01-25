@@ -1,7 +1,6 @@
 VERSION    = v1.0
 
-TRGT      ?= /opt/codebender/codebender-arduino-core-files/v167/packages/arduin
-o/tools/arm-none-eabi-gcc/gcc-arm-none-eabi-4.8.3-2014q1/bin/arm-none-eabi-
+TRGT      ?= /opt/codebender/codebender-arduino-core-files/v167/packages/arduino/tools/arm-none-eabi-gcc/gcc-arm-none-eabi-4.8.3-2014q1/bin/arm-none-eabi-
 CC         = $(TRGT)gcc
 CXX        = $(TRGT)g++
 OBJCOPY    = $(TRGT)objcopy
@@ -27,8 +26,8 @@ LFLAGS     = $(ADD_LFLAGS) $(PKG_LFLAGS) $(CFLAGS) \
 
 OBJ_DIR    = .obj/
 
-CSOURCES   = $(wildcard source/*.c)
-CPPSOURCES = $(wildcard source/*.cpp)
+CSOURCES   = $(shell find source -name '*.c')
+CPPSOURCES = $(shell find source -name '*.cpp')
 ASOURCES   = $(wildcard source/*.s)
 COBJS      = $(addprefix $(OBJ_DIR)/, $(CSOURCES:.c=.o))
 CXXOBJS    = $(addprefix $(OBJ_DIR)/, $(CPPSOURCES:.cpp=.o))
@@ -60,6 +59,8 @@ $(TARGET): $(OBJECTS) $(LDSCRIPT)
 	$(QUIET) $(CXX) $(OBJECTS) $(LFLAGS) -o $@
 	$(QUIET) echo "  OBJCOPY  $(PACKAGE).bin"
 	$(QUIET) $(OBJCOPY) -O binary $@ $(PACKAGE).bin
+	$(QUIET) echo "  OBJCOPY  $(PACKAGE).hex"
+	$(QUIET) $(OBJCOPY) -O ihex $@ $(PACKAGE).hex
 	$(QUIET) echo "  SYMBOL   $(PACKAGE).symbol"
 	$(QUIET) $(OBJCOPY) --only-keep-debug $< $(PACKAGE).symbol 2> /dev/null
 
@@ -72,7 +73,8 @@ LFLAGS += $(DBG_LFLAGS)
 $(DEBUG): $(TARGET)
 
 $(OBJ_DIR):
-	$(QUIET) mkdir -p $(OBJ_DIR)
+	$(QUIET) mkdir -p $(OBJ_DIR) $(OBJ_DIR)/source
+	$(QUIET) for i in `find source`; do mkdir -p $(OBJ_DIR)/$$i; done
 
 $(COBJS) : $(OBJ_DIR)/%.o : %.c Makefile
 	$(QUIET) echo "  CC       $<	$(notdir $@)"

@@ -1,20 +1,21 @@
 #ifndef __PXT_H
 #define __PXT_H
 
-// #define printf(...) uBit.serial.printf(__VA_ARGS__)
-#define printf(...)
-
 // #define intcheck(...) check(__VA_ARGS__)
 #define intcheck(...) do {} while (0)
 
 #include <string.h>
 #include <stdint.h>
+#include "utvector.h"
+#include "RefCounted.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern const uint32_t functionsAndBytecode[];
+extern uint32_t *globals;
+extern uint16_t *bytecode;
 typedef uint32_t Action;
 typedef uint32_t ImageLiteral;
 
@@ -28,12 +29,6 @@ typedef enum {
     ERR_SIZE = 9,
 } ERROR;
 
-// Utility functions
-uint32_t runAction3(Action a, int arg0, int arg1, int arg2);
-uint32_t runAction2(Action a, int arg0, int arg1);
-uint32_t runAction1(Action a, int arg0);
-uint32_t runAction0(Action a);
-
 void error(ERROR code, int subcode
 #ifdef __cplusplus
     = 0
@@ -43,8 +38,14 @@ void error(ERROR code, int subcode
 #ifdef __cplusplus
 };
 
+namespace pxt {
+  // Utility functions
+  uint32_t runAction3(Action a, int arg0, int arg1, int arg2);
+  uint32_t runAction2(Action a, int arg0, int arg1);
+  uint32_t runAction1(Action a, int arg0);
+  uint32_t runAction0(Action a);
+  Action mkAction(int reflen, int totallen, int startptr);
 
-#if 0
 class RefRecord;
 RefRecord* mkClassInstance(int vtableOffset);
 
@@ -67,7 +68,6 @@ inline void check(int cond, ERROR code, int subcode = 0)
 {
   if (!cond) error(code, subcode);
 }
-
 
 class RefObject;
 
@@ -142,15 +142,15 @@ const int vtableShift = 2;
     inline bool isRef() { return getFlags() & 1; }
     inline bool isString() { return getFlags() & 2; }
 
-    std::vector<uint32_t> data;
+    UT_vector *data;
 
     RefCollection(uint16_t f);
 
     inline bool in_range(int x) {
-      return (0 <= x && x < (int)data.size());
+      return (0 <= x && x < (int)utvector_len(data));
     }
 
-    inline int length() { return data.size(); }
+    inline int length() { return utvector_len(data); }
 
     void destroy();
     void print();
@@ -172,7 +172,7 @@ const int vtableShift = 2;
     : public RefObject
   {
   public:
-    std::vector<MapEntry> data;
+    UT_vector *data;
 
     RefMap();
     void destroy();
@@ -257,7 +257,7 @@ const int vtableShift = 2;
     void print();
     RefRefLocal();
   };
-#endif
+}
 
 #endif /* __cplusplus */
 
@@ -271,7 +271,7 @@ const int vtableShift = 2;
  */
   
 #define PXT_SHIMS_BEGIN \
-  const uint32_t functionsAndBytecode[] __attribute__((aligned(0x20))) = { \
+  extern "C" const uint32_t functionsAndBytecode[] __attribute__((aligned(0x20), section(".dataend"))) = { \
     0x08010801, 0x42424242, 0x08010801, 0x8de9d83e,
 
 #define PXT_SHIMS_END };

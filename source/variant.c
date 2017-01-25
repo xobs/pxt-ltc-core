@@ -49,13 +49,13 @@ int error_code = 0;
 int error_subcode = 0;
 
 void *malloc(size_t size);
-void *__memset(void *s, int c, size_t n);
+void *memset(void *s, int c, size_t n);
 
 static uint32_t *allocate(uint16_t sz) {
   uint32_t *arr;
   
   arr = malloc(sz * sizeof(*arr));
-  __memset(arr, 0, sz * sizeof(*arr));
+  memset(arr, 0, sz * sizeof(*arr));
 
   return arr;
 }

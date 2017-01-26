@@ -3,3 +3,5 @@ yotta_modules
 yotta_targets/*
 .idea
 *.iml
+*.swp
+*.swo

@@ -21,12 +21,12 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include "utvector.h"
 
 #define INITIAL_SIZE 16
+#define assert(x)
 
 /* utvector
  *
@@ -41,7 +41,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 void oom(void) {
   //fprintf(stderr,"out of memory\n");
-  exit(-1);
+  //exit(-1);
 }
 
 UT_vector *utvector_new(const UT_mm *mm) {

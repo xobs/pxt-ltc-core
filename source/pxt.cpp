@@ -1,6 +1,6 @@
 #include "pxt.h"
 
-static const UT_mm _utmm_uint64 = {.sz = sizeof(uint64_t), 0, 0, 0, 0};
+static const UT_mm _utmm_uint64 = {.sz = sizeof(struct pxt::MapEntry), 0, 0, 0, 0};
 const UT_mm* utmm_uint64 = &_utmm_uint64;
 
 namespace pxt {
@@ -142,12 +142,20 @@ namespace pxt {
 
     void RefCollection::push(uint32_t x) {
       if (isRef()) incr(x);
-      utvector_push(data, (void *)x);
+      utvector_push(data, &x);
+    }
+
+    void RefCollection::setLength(int newLength) {
+      utvector_reserve(data, newLength);
+    }
+
+    uint32_t RefCollection::pop(void) {
+      return removeElement(length() - 1);
     }
 
     uint32_t RefCollection::getAt(int x) {
       if (in_range(x)) {
-        uint32_t tmp = (uint32_t)utvector_elt(data, (unsigned)x);
+        uint32_t tmp = *(uint32_t *)utvector_elt(data, (unsigned)x);
         if (isRef()) incr(tmp);
         return tmp;
       }
@@ -157,12 +165,19 @@ namespace pxt {
       }
     }
 
-    void RefCollection::removeAt(int x) {
+    uint32_t RefCollection::removeAt(int x) {
+      uint32_t *ep = (uint32_t *)utvector_elt(data, x);
       if (!in_range(x))
-        return;
+        return 0;
 
-      if (isRef()) decr((uint32_t)utvector_elt(data, (unsigned)x));
+      if (!ep)
+        return 0;
+
+      uint32_t e = *ep;
+
+      if (isRef()) decr(e);
       utvector_erase(data, x);
+      return e;
     }
 
     void RefCollection::setAt(int x, uint32_t y) {
@@ -170,11 +185,29 @@ namespace pxt {
         return;
 
       if (isRef()) {
-        decr((uint32_t)utvector_elt(data, (unsigned)x));
+        decr(*(uint32_t *)utvector_elt(data, (unsigned)x));
         incr(y);
       }
-      //data.at(x) = y;
-      *((uint32_t *)(data->d + (y * data->mm.sz))) = y;
+      *(uint32_t *)utvector_elt(data, (unsigned)x) = y;
+    }
+
+    void RefCollection::insertAt(int x, uint32_t y) {
+      if (x == length()) {
+        push(y);
+        return;
+      }
+
+      if (!in_range(x))
+        return;
+
+      push(0);
+      int i;
+      for (i = length(); i < x; i--)
+        *(uint32_t *)utvector_elt(data, i) = *(uint32_t *)utvector_elt(data, i - 1);
+      if (isRef()) {
+        incr(y);
+      }
+      *(uint32_t *)utvector_elt(data, x) = y;
     }
 
     int RefCollection::indexOf(uint32_t x, int start) {
@@ -192,7 +225,7 @@ namespace pxt {
 */
       } else {
         for (uint32_t i = start; i < utvector_len(data); ++i)
-          if (((uint32_t)utvector_elt(data, i)) == x)
+          if (*((uint32_t *)utvector_elt(data, i)) == x)
             return (int)i;
       }
 
@@ -244,7 +277,7 @@ namespace pxt {
     {
       if (this->isRef())
         for (uint32_t i = 0; i < utvector_len(this->data); ++i) {
-          decr((uint32_t)utvector_elt(this->data, i));
+          decr(*(uint32_t *)utvector_elt(this->data, i));
         }
       utvector_clear(this->data);
     }
@@ -314,5 +347,31 @@ namespace pxt {
     void RefMap::print()
     {
       printf("RefMap %p r=%d size=%d\n", this, refcnt, utvector_len(data));
+    }
+
+    void debugMemLeaks() {}
+
+    uint32_t *allocate(uint16_t sz) {
+      uint32_t *arr;
+
+      arr = (uint32_t *) malloc(sz * sizeof(*arr));
+      memset((void *)arr, 0, sz * sizeof(*arr));
+
+      return arr;
+    }
+
+    int templateHash()
+    {
+      return ((int*)bytecode)[4];
+    }
+
+    int programHash()
+    {
+      return ((int*)bytecode)[6];
+    }
+
+    int getNumGlobals()
+    {
+      return bytecode[16];
     }
 }

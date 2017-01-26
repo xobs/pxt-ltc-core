@@ -33,6 +33,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __UTMM_H_
 #define __UTMM_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
    size_t sz;
@@ -51,5 +54,9 @@ void utmm_copy(const UT_mm *mm, void *dst, void *src, size_t n);
 /* convenient predefined mm */
 extern UT_mm* utmm_int;
 extern UT_mm* utstring_mm;
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif /* __UTMM_H_ */

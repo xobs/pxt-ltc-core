@@ -46,23 +46,28 @@ namespace pxt {
   uint32_t runAction0(Action a);
   Action mkAction(int reflen, int totallen, int startptr);
 
-class RefRecord;
-RefRecord* mkClassInstance(int vtableOffset);
+  class RefRecord;
+  RefRecord* mkClassInstance(int vtableOffset);
 
-// The standard calling convention is:
-//   - when a pointer is loaded from a local/global/field etc, and incr()ed
-//     (in other words, its presence on stack counts as a reference)
-//   - after a function call, all pointers are popped off the stack and decr()ed
-// This does not apply to the RefRecord and st/ld(ref) methods - they unref()
-// the RefRecord* this.
-int incr(uint32_t e);
-void decr(uint32_t e);
+  inline void *ptrOfLiteral(int offset)
+  {
+    return &bytecode[offset];
+  }
+
+  // The standard calling convention is:
+  //   - when a pointer is loaded from a local/global/field etc, and incr()ed
+  //     (in other words, its presence on stack counts as a reference)
+  //   - after a function call, all pointers are popped off the stack and decr()ed
+  // This does not apply to the RefRecord and st/ld(ref) methods - they unref()
+  // the RefRecord* this.
+  int incr(uint32_t e);
+  void decr(uint32_t e);
 
 // Checks if object has a VTable, or if its RefCounted* from the runtime.
-inline bool hasVTable(uint32_t e)
-{
-  return (*((uint32_t*)e) & 1) == 0;
-}
+  inline bool hasVTable(uint32_t e)
+  {
+    return (*((uint32_t*)e) & 1) == 0;
+  }
 
 inline void check(int cond, ERROR code, int subcode = 0)
 {
@@ -156,9 +161,12 @@ const int vtableShift = 2;
     void print();
 
     void push(uint32_t x);
+    uint32_t pop(void);
+    void setLength(int newLength);
     uint32_t getAt(int x);
-    void removeAt(int x);
+    uint32_t removeAt(int x);
     void setAt(int x, uint32_t y);
+    void insertAt(int x, uint32_t y);
     int indexOf(uint32_t x, int start);
     int removeElement(uint32_t x);
   };
@@ -258,6 +266,9 @@ const int vtableShift = 2;
     RefRefLocal();
   };
 }
+
+/* Import pxt:: into pointers.cpp */
+using namespace pxt;
 
 #endif /* __cplusplus */
 

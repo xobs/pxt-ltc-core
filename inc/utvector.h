@@ -37,6 +37,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "utmm.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* typical usage e.g. a vector of utstring would have
  *
    .sz = sizeof(UT_string)
@@ -72,5 +76,8 @@ void utvector_erase(UT_vector *v, unsigned i);
 void *utvector_push(UT_vector *v, void *e);
 unsigned utvector_len(UT_vector *v);
 
+#ifdef __cplusplus
+};
+#endif
 
 #endif /* __UTVECTOR_H_ */

@@ -65,25 +65,25 @@ static int templateHash(void)
   return ((int*)bytecode)[4];
 }
 
-//static int programHash(void) {
-//  return ((int*)bytecode)[6];
-//}
-
 static int getNumGlobals(void) {
   return bytecode[16];
 }
 
 __attribute__((noreturn))
-static void panic(const char *str) {
+void panic(const char *str) {
   panic_msg = str;
+  setSerialSpeed(9600);
   while (1)
-    ;
+    printf("PANIC: %s\r\n", str);
 }
 
+__attribute__((noreturn))
 void error(ERROR code, int subcode) {
-  error_code = (int)code;
+  error_code = code;
   error_subcode = subcode;
-  panic("Errored");
+  setSerialSpeed(9600);
+  while(1)
+    printf("ERROR %d: %d\r\n", code, subcode);
 }
 
 static void assert(int cond, const char *msg) {
@@ -123,12 +123,8 @@ static void exec_binary(int32_t *pc) {
   return;
 }
 
-__attribute__((naked, noreturn))
 void Esplanade_Main(void) {
-
   exec_binary((int32_t*)functionsAndBytecode);
-
-  panic("Exited");
 }
 
 __attribute__ ((used, section(".progheader")))

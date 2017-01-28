@@ -233,20 +233,6 @@ long randomSeed(unsigned long seed);
 #define PTA(x) (0x40 | (x))
 #define PTB(x) (0x40 | (32 + x))
 
-#define A0 0x80
-#define A1 0x81
-#define A2 0x82
-#define A3 0x83
-#define A4 0x84
-#define A5 0x85 /* Temperature sensor */
-#define A6 0x86 /* Voltage sensor */
-#define A7 0x87 /* VDD voltage value */
-#define A8 0x88 /* VCC voltage value */
-
-/* Digital pins */
-#define D0 0x00
-#define D1 0x01
-
 #define LED_BUILTIN       PTA(12)
 #define LED_A2            LED_BUILTIN
 #define BUTTON_A1         PTA(9)

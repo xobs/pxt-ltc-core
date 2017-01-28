@@ -34,6 +34,8 @@ void error(ERROR code, int subcode
     = 0
 #endif
 );
+void panic(const char *str);
+
 
 #ifdef __cplusplus
 };

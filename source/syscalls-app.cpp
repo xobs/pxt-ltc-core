@@ -680,11 +680,11 @@ extern "C" {
     void suspendThreadTimeoutS(void) {
       asm("svc #149");
     }
-};
   __attribute__((naked))
   void pinMode(int pin, int mode) {
     asm("svc #88");
   }
+};
   __attribute__((naked))
   void digitalWrite(int pin, int value) {
     asm("svc #89");

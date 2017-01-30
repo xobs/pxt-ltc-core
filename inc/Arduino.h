@@ -42,6 +42,8 @@ long atol(const char *nptr);
 int printf(const char *format, ...);
 int snprintf(char *str, size_t size, const char *format, ...);
 
+/* Generic IO */
+void pinMode(int pin, int mode);
 #ifdef __cplusplus
 };
 #endif
@@ -49,9 +51,6 @@ int snprintf(char *str, size_t size, const char *format, ...);
 
 /* Undef this, as there's no difference between the types of memory */
 #define PROGMEM
-
-/* Generic IO */
-void pinMode(int pin, enum pin_mode mode);
 
 /* Digital IO */
 void digitalWrite(int pin, int value);

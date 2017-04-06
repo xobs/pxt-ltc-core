@@ -30,6 +30,7 @@ DEALINGS IN THE SOFTWARE.
 #include <stdint.h>
 #include "app.h"
 #include "pxt.h"
+#include "ChibiOS.h"
 
 uint16_t *bytecode;
 uint32_t *globals;
@@ -43,7 +44,7 @@ void *memset(void *s, int c, size_t n);
 static uint32_t *allocate(uint16_t sz) {
   uint32_t *arr;
   
-  arr = malloc(sz * sizeof(*arr));
+  arr = (uint32_t *)malloc(sz * sizeof(*arr));
   memset(arr, 0, sz * sizeof(*arr));
 
   return arr;

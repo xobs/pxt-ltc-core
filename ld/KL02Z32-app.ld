@@ -21,7 +21,7 @@
  * KL25Z128 memory setup.
  */
 
-ENTRY(Esplanade_Main)
+ENTRY(main)
 
 MEMORY
 {

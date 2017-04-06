@@ -12,7 +12,7 @@ DBG_LFLAGS = -ggdb -g -Wall
 CFLAGS     = $(ADD_CFLAGS) \
              -DVERSION=\"$(VERSION)\" \
              -DARDUINO=160 \
-             -I. -Iinc \
+             -I. -Iinc -Isrc -Isrc/core \
              -fsingle-precision-constant -Wall -Wextra \
              -mcpu=cortex-m0plus -mfloat-abi=soft -mthumb \
              -DARDUINO_APP -fno-builtin \
@@ -26,9 +26,9 @@ LFLAGS     = $(ADD_LFLAGS) $(PKG_LFLAGS) $(CFLAGS) \
 
 OBJ_DIR    = .obj/
 
-CSOURCES   = $(shell find source -name '*.c')
-CPPSOURCES = $(shell find source -name '*.cpp')
-ASOURCES   = $(wildcard source/*.s)
+CSOURCES   = $(shell find src -name '*.c')
+CPPSOURCES = $(shell find src -name '*.cpp')
+ASOURCES   = $(wildcard src/*.s)
 COBJS      = $(addprefix $(OBJ_DIR)/, $(CSOURCES:.c=.o))
 CXXOBJS    = $(addprefix $(OBJ_DIR)/, $(CPPSOURCES:.cpp=.o))
 AOBJS      = $(addprefix $(OBJ_DIR)/, $(ASOURCES:.s=.o))
@@ -73,8 +73,8 @@ LFLAGS += $(DBG_LFLAGS)
 $(DEBUG): $(TARGET)
 
 $(OBJ_DIR):
-	$(QUIET) mkdir -p $(OBJ_DIR) $(OBJ_DIR)/source
-	$(QUIET) for i in `find source`; do mkdir -p $(OBJ_DIR)/$$i; done
+	$(QUIET) mkdir -p $(OBJ_DIR) $(OBJ_DIR)/src
+	$(QUIET) for i in `find src`; do mkdir -p $(OBJ_DIR)/$$i; done
 
 $(COBJS) : $(OBJ_DIR)/%.o : %.c Makefile
 	$(QUIET) echo "  CC       $<	$(notdir $@)"
